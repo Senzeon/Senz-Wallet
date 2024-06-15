@@ -22,20 +22,18 @@ body {
 }
 
 .clicks {
-  position: relative; /* Позиціювання відносно батьківського елемента */
-  top: -70px; /* Відступ від центру */
+  position: relative; /* Використовуємо відносне позиціонування */
+  top: -80px; /* Зміщення нагору, adjust this value as needed */
+  text-align: center; /*  Вирівнюємо текст по центру */
   font-size: 30px;
   color: white;
   text-shadow: 0 0 5px black;
-  text-align: center; /* Вирівнювання тексту по центру */
 }
 </style>
 </head>
 <body>
 
-<div class="coin"></div>
-<div class="clicks">0</div>
-
+<div class="clicks">0</div> <div class="coin"></div>
 <script>
 const coin = document.querySelector('.coin');
 const clicksDisplay = document.querySelector('.clicks');
