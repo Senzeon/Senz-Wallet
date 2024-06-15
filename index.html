@@ -153,6 +153,7 @@ let score = 0;
 let clickPower = 1;
 let upgradePrice = 5;
 let upgrades = [];
+let completedQuests = [];
 
 const scoreElement = document.querySelector('.score');
 const clickerButton = document.querySelector('.clicker-button');
@@ -166,6 +167,11 @@ const questList = document.querySelector('.quest-list');
 // Оновлення рахунку
 function updateScore() {
   scoreElement.textContent = score;
+  localStorage.setItem('score', score);
+  localStorage.setItem('clickPower', clickPower);
+  localStorage.setItem('upgradePrice', upgradePrice);
+  localStorage.setItem('upgrades', JSON.stringify(upgrades));
+  localStorage.setItem('completedQuests', JSON.stringify(completedQuests));
 }
 
 // Клікер
@@ -217,6 +223,8 @@ questItems.forEach(questItem => {
         score += 2000;
         updateScore();
         questItem.classList.add('completed');
+        completedQuests.push(quest);
+        updateScore();
       }
     }
   });
@@ -245,8 +253,28 @@ menuItems.forEach(menuItem => {
   });
 });
 
+// Завантаження збережень
+function loadGame() {
+  score = parseInt(localStorage.getItem('score')) || 0;
+  clickPower = parseInt(localStorage.getItem('clickPower')) || 1;
+  upgradePrice = parseInt(localStorage.getItem('upgradePrice')) || 5;
+  upgrades = JSON.parse(localStorage.getItem('upgrades')) || [];
+  completedQuests = JSON.parse(localStorage.getItem('completedQuests')) || [];
+
+  // Оновлення стану квестів
+  completedQuests.forEach(quest => {
+    const questItem = questList.querySelector(`.quest-item[data-quest="${quest}"]`);
+    if (questItem) {
+      questItem.classList.add('completed');
+    }
+  });
+
+  updateScore();
+  renderUpgrades();
+}
+
 // Початкове налаштування
-updateScore();
+loadGame();
 addUpgrade();
 renderUpgrades();
 </script>
