@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Клікер</title>
+<title>Clicker</title>
 <style>
 body {
   background-color: #222;
@@ -84,8 +84,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
-  max-width: 300px; /* Встановили максимальну ширину для кращого вигляду */
 }
 
 .upgrade-item {
@@ -110,8 +108,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
-  max-width: 300px; /* Встановили максимальну ширину для кращого вигляду */
 }
 
 .quest-item {
@@ -144,23 +140,24 @@ body {
 
 <div class="container">
   <div class="menu-bar">
-    <div class="menu-item active" data-menu="main">Головне</div>
-    <div class="menu-item" data-menu="upgrade">Покращення</div>
-    <div class="menu-item" data-menu="quest">Квести</div>
+    <div class="menu-item active" data-menu="main">Main</div>
+    <div class="menu-item" data-menu="upgrade">Upgrades</div>
+    <div class="menu-item" data-menu="quest">Quests</div>
   </div>
 
   <div class="content" id="main-content">
     <div class="score">0</div>
-    <button class="clicker-button">Натисни мене!</button>
+    <button class="clicker-button">Click me!</button>
   </div>
 
   <div class="content" id="upgrade-content" style="display: none;">
-    <div class="upgrade-list" id="upgrade-list"></div>
+    <div class="upgrade-list" id="upgrade-list">
+      </div>
   </div>
 
   <div class="content" id="quest-content" style="display: none;">
     <div class="quest-list">
-      <div class="quest-item" data-quest="telegram">Підпишіться на наш канал в Телеграм: 
+      <div class="quest-item" data-quest="telegram">Subscribe to our Telegram channel: 
         <a href="https://t.me/your_channel" target="_blank" class="telegram-button">t.me/your_channel</a>
       </div>
     </div>
@@ -199,7 +196,7 @@ clickerButton.addEventListener('click', () => {
 
 // Покращення
 function addUpgrade() {
-  if (upgrades.length === 0) { // Додаємо покращення тільки якщо їх ще немає
+  if (upgrades.length === 0) {
     const upgrade = {
       power: 1,
       price: upgradePrice
@@ -211,25 +208,25 @@ function addUpgrade() {
 
 function renderUpgrades() {
   upgradeList.innerHTML = '';
-  upgrades.forEach((upgrade, index) => {
+  if (upgrades.length > 0) {
     const upgradeItem = document.createElement('div');
     upgradeItem.classList.add('upgrade-item');
     upgradeItem.innerHTML = `
-      <div class="upgrade-title">Покращення ${index + 1}</div>
-      <div class="upgrade-price">${upgrade.price}</div>
+      <div class="upgrade-title">Upgrade 1</div>
+      <div class="upgrade-price">${upgrades[0].price}</div>
     `;
     upgradeItem.addEventListener('click', () => {
-      if (score >= upgrade.price) {
-        score -= upgrade.price;
+      if (score >= upgrades[0].price) {
+        score -= upgrades[0].price;
         updateScore();
-        clickPower += upgrade.power;
-        upgrade.price *= 5;
-        upgrade.power += 1;
+        clickPower += upgrades[0].power;
+        upgrades[0].price *= 5;
+        upgrades[0].power += 1;
         renderUpgrades();
       }
     });
     upgradeList.appendChild(upgradeItem);
-  });
+  }
 }
 
 // Квести
@@ -242,7 +239,7 @@ questItems.forEach(questItem => {
         score += 500; 
         updateScore();
         questItem.classList.add('completed');
-        localStorage.setItem('quest_telegram', 'completed'); // Зберігаємо виконання квесту в localstorage
+        localStorage.setItem('quest_telegram', 'completed');
       }
     }
   });
