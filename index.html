@@ -23,12 +23,24 @@ body {
 
 .clicks {
   position: absolute;
+  top: 25%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: white;
+  text-shadow: 0 0 5px black;
+}
+
+.plusOne {
+  position: absolute;
   top: 25%; /* Змінено на 25% */
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
   color: white;
   text-shadow: 0 0 5px black;
+  opacity: 1;
+  transition: top 0.5s ease, opacity 0.5s ease;
 }
 </style>
 </head>
@@ -45,6 +57,22 @@ let clicks = 0;
 coin.addEventListener('click', () => {
   clicks++;
   clicksDisplay.textContent = clicks;
+
+  // Створення елемента +1
+  const plusOne = document.createElement('div');
+  plusOne.classList.add('plusOne');
+  plusOne.textContent = '+1';
+  document.body.appendChild(plusOne);
+
+  // Анімація +1
+  plusOne.style.top = '25%'; // Початкове положення
+  setTimeout(() => {
+    plusOne.style.top = '0%'; // Рух вгору
+    plusOne.style.opacity = '0'; // Зникнення
+    setTimeout(() => {
+      plusOne.remove(); // Видалення елемента
+    }, 500); // Після 0.5 секунди
+  }, 1000); // Після 1 секунди
 });
 </script>
 
