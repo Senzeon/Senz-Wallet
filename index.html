@@ -4,195 +4,252 @@
 <title>Клікер</title>
 <style>
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
   background-color: #222;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 10px;
+  gap: 20px;
 }
 
-.click-button {
-  width: 200px;
-  height: 200px;
+.clicker-button {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: linear-gradient(to bottom, #444, #000);
+  background: linear-gradient(to bottom, #000, #333);
   border: none;
   cursor: pointer;
-  user-select: none; /* Запобігає виділенню */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard syntax */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.2s;
 }
 
-.click-button:active {
-  box-shadow: 0 0 10px #fff;
+.clicker-button:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.menu-panel {
+.clicker-button:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.menu-bar {
   display: flex;
-  justify-content: space-around;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 10px;
   width: 100%;
-  margin-top: 20px;
+  max-width: 600px;
 }
 
 .menu-item {
-  background-color: #444;
-  padding: 10px;
-  border-radius: 5px;
+  flex: 1;
+  text-align: center;
   cursor: pointer;
-  user-select: none;
+  color: #fff;
+}
+
+.menu-item:hover {
+  background-color: #444;
 }
 
 .menu-item.active {
   background-color: #555;
 }
 
-.stats {
-  margin-top: 20px;
-  text-align: center;
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.upgrade-menu {
-  display: none;
-  align-items: center;
+.score {
+  font-size: 30px;
+}
+
+.upgrade-list {
+  display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .upgrade-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
-  margin-bottom: 10px;
-}
-
-.upgrade-item button {
-  background-color: #555;
-  padding: 5px 10px;
-  border: none;
+  padding: 10px;
+  background-color: #444;
   border-radius: 5px;
-  cursor: pointer;
-  user-select: none;
 }
 
-.quest-menu {
-  display: none;
-  align-items: center;
+.upgrade-title {
+  font-weight: bold;
+}
+
+.upgrade-price {
+  color: #fff;
+}
+
+.quest-list {
+  display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .quest-item {
-  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #444;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
 }
 
-.quest-item button {
+.quest-item.completed {
   background-color: #555;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  user-select: none;
 }
 </style>
 </head>
 <body>
+
 <div class="container">
-  <div class="click-button"></div>
-  <div class="stats">
-    <p>Кліків: <span id="clicks">0</span></p>
-    <p>Сила: <span id="power">1</span></p>
-  </div>
-  <div class="menu-panel">
-    <div class="menu-item active" id="main-menu">Головне</div>
-    <div class="menu-item" id="upgrade-menu">Покращення</div>
-    <div class="menu-item" id="quest-menu">Квести</div>
+  <div class="menu-bar">
+    <div class="menu-item active" data-menu="main">Головне</div>
+    <div class="menu-item" data-menu="upgrade">Покращення</div>
+    <div class="menu-item" data-menu="quest">Квести</div>
   </div>
 
-  <div class="upgrade-menu">
-    <div class="upgrade-item">
-      <span>Збільшення сили</span>
-      <span>Ціна: <span id="upgrade-price">5</span></span>
-      <button id="upgrade-button">Купити</button>
-    </div>
+  <div class="content" id="main-content">
+    <div class="score">0</div>
+    <button class="clicker-button">Натисни мене!</button>
   </div>
 
-  <div class="quest-menu">
-    <div class="quest-item">
-      <span>Підпишись на телеграм канал:</span>
-      <button id="quest-button">Отримати нагороду</button>
+  <div class="content" id="upgrade-content" style="display: none;">
+    <div class="upgrade-list" id="upgrade-list">
+      </div>
+  </div>
+
+  <div class="content" id="quest-content" style="display: none;">
+    <div class="quest-list">
+      <div class="quest-item" data-quest="telegram">Підпишіться на наш канал в Телеграм: <a href="https://t.me/your_channel" target="_blank">t.me/your_channel</a></div>
     </div>
   </div>
 </div>
 
 <script>
-const clickButton = document.querySelector('.click-button');
-const clicksSpan = document.getElementById('clicks');
-const powerSpan = document.getElementById('power');
-const upgradeButton = document.getElementById('upgrade-button');
-const upgradePriceSpan = document.getElementById('upgrade-price');
-const questButton = document.getElementById('quest-button');
-
-let clicks = 0;
-let power = 1;
+let score = 0;
+let clickPower = 1;
 let upgradePrice = 5;
+let upgrades = [];
 
-clickButton.addEventListener('click', () => {
-  clicks += power;
-  clicksSpan.textContent = clicks;
-});
-
-upgradeButton.addEventListener('click', () => {
-  if (clicks >= upgradePrice) {
-    clicks -= upgradePrice;
-    clicksSpan.textContent = clicks;
-    power++;
-    powerSpan.textContent = power;
-    upgradePrice *= 5;
-    upgradePriceSpan.textContent = upgradePrice;
-  }
-});
-
-questButton.addEventListener('click', () => {
-  // Тут додайте код для перевірки виконання квесту
-  // наприклад, перевірку чи користувач підписаний на телеграм канал
-  if (/* умові виконання квесту */) {
-    clicks += 2000;
-    clicksSpan.textContent = clicks;
-    alert('Виконано квест!');
-  }
-});
-
-// Обробка меню
-const mainMenu = document.getElementById('main-menu');
-const upgradeMenu = document.getElementById('upgrade-menu');
-const questMenu = document.getElementById('quest-menu');
+const scoreElement = document.querySelector('.score');
+const clickerButton = document.querySelector('.clicker-button');
+const upgradeList = document.getElementById('upgrade-list');
 const menuItems = document.querySelectorAll('.menu-item');
+const mainContent = document.getElementById('main-content');
+const upgradeContent = document.getElementById('upgrade-content');
+const questContent = document.getElementById('quest-content');
+const questList = document.querySelector('.quest-list');
 
-menuItems.forEach(item => {
-  item.addEventListener('click', () => {
-    menuItems.forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
-    if (item === mainMenu) {
-      upgradeMenu.style.display = 'none';
-      questMenu.style.display = 'none';
-    } else if (item === upgradeMenu) {
-      upgradeMenu.style.display = 'flex';
-      questMenu.style.display = 'none';
-    } else if (item === questMenu) {
-      upgradeMenu.style.display = 'none';
-      questMenu.style.display = 'flex';
+// Оновлення рахунку
+function updateScore() {
+  scoreElement.textContent = score;
+}
+
+// Клікер
+clickerButton.addEventListener('click', () => {
+  score += clickPower;
+  updateScore();
+});
+
+// Покращення
+function addUpgrade() {
+  const upgrade = {
+    power: 1,
+    price: upgradePrice
+  };
+  upgrades.push(upgrade);
+  renderUpgrades();
+}
+
+function renderUpgrades() {
+  upgradeList.innerHTML = '';
+  upgrades.forEach((upgrade, index) => {
+    const upgradeItem = document.createElement('div');
+    upgradeItem.classList.add('upgrade-item');
+    upgradeItem.innerHTML = `
+      <div class="upgrade-title">Покращення ${index + 1}</div>
+      <div class="upgrade-price">${upgrade.price}</div>
+    `;
+    upgradeItem.addEventListener('click', () => {
+      if (score >= upgrade.price) {
+        score -= upgrade.price;
+        updateScore();
+        clickPower += upgrade.power;
+        upgrade.price *= 5;
+        upgrade.power += 1;
+        renderUpgrades();
+      }
+    });
+    upgradeList.appendChild(upgradeItem);
+  });
+}
+
+// Квести
+const questItems = questList.querySelectorAll('.quest-item');
+questItems.forEach(questItem => {
+  questItem.addEventListener('click', () => {
+    if (!questItem.classList.contains('completed')) {
+      const quest = questItem.dataset.quest;
+      if (quest === 'telegram') {
+        score += 2000;
+        updateScore();
+        questItem.classList.add('completed');
+      }
     }
   });
 });
+
+// Меню
+menuItems.forEach(menuItem => {
+  menuItem.addEventListener('click', () => {
+    menuItems.forEach(item => item.classList.remove('active'));
+    menuItem.classList.add('active');
+    const menu = menuItem.dataset.menu;
+    mainContent.style.display = 'none';
+    upgradeContent.style.display = 'none';
+    questContent.style.display = 'none';
+    switch (menu) {
+      case 'main':
+        mainContent.style.display = 'flex';
+        break;
+      case 'upgrade':
+        upgradeContent.style.display = 'flex';
+        break;
+      case 'quest':
+        questContent.style.display = 'flex';
+        break;
+    }
+  });
+});
+
+// Початкове налаштування
+updateScore();
+addUpgrade();
+renderUpgrades();
 </script>
+
 </body>
 </html>
