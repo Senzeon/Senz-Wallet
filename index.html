@@ -164,6 +164,19 @@ body {
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+// Ваш код Firebase (вставте сюди свої дані конфігурації)
+const firebaseConfig = {
+  // ...
+};
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// ... (решта коду)
+</script>
+
 <script>
 let score = 0;
 let clickPower = 1;
@@ -182,10 +195,10 @@ const questList = document.querySelector('.quest-list');
 // Оновлення рахунку
 function updateScore() {
   scoreElement.textContent = score;
-  localStorage.setItem('score', score);
-  localStorage.setItem('clickPower', clickPower);
-  localStorage.setItem('upgradePrice', upgradePrice);
-  localStorage.setItem('upgrades', JSON.stringify(upgrades));
+  database.ref('users/your_user_id/score').set(score); // Зберігаємо рахунок у Firebase
+  database.ref('users/your_user_id/clickPower').set(clickPower); // Зберігаємо потужність кліка в Firebase
+  database.ref('users/your_user_id/upgradePrice').set(upgradePrice); // Зберігаємо ціну покращення в Firebase
+  database.ref('users/your_user_id/upgrades').set(JSON.stringify(upgrades)); // Зберігаємо покращення в Firebase
 }
 
 // Клікер
@@ -239,7 +252,7 @@ questItems.forEach(questItem => {
         score += 500; 
         updateScore();
         questItem.classList.add('completed');
-        localStorage.setItem('quest_telegram', 'completed');
+        database.ref('users/your_user_id/quests/telegram').set('completed'); // Зберігаємо статус квесту в Firebase
       }
     }
   });
@@ -270,25 +283,28 @@ menuItems.forEach(menuItem => {
 
 // Завантаження збережень
 function loadSavedData() {
-  score = parseInt(localStorage.getItem('score')) || 0;
-  clickPower = parseInt(localStorage.getItem('clickPower')) || 1;
-  upgradePrice = parseInt(localStorage.getItem('upgradePrice')) || 5;
-  upgrades = JSON.parse(localStorage.getItem('upgrades')) || [];
-
-  // Перевірка виконання квестів
-  const telegramQuest = questList.querySelector('[data-quest="telegram"]');
-  if (telegramQuest) {
-    if (localStorage.getItem('quest_telegram') === 'completed') {
-      telegramQuest.classList.add('completed');
+  database.ref('users/your_user_id').on('value', (snapshot) => {
+    const userData = snapshot.val();
+    if (userData) {
+      score = userData.score || 0;
+      clickPower = userData.clickPower || 1;
+      upgradePrice = userData.upgradePrice || 5;
+      upgrades = userData.upgrades ? JSON.parse(userData.upgrades) : [];
+      if (userData.quests && userData.quests.telegram === 'completed') {
+        const telegramQuest = questList.querySelector('[data-quest="telegram"]');
+        if (telegramQuest) {
+          telegramQuest.classList.add('completed');
+        }
+      }
     }
-  }
+    updateScore();
+    addUpgrade();
+    renderUpgrades();
+  });
 }
 
 // Початкове налаштування
 loadSavedData();
-updateScore();
-addUpgrade();
-renderUpgrades();
 </script>
 
 </body>
