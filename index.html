@@ -11,11 +11,10 @@ body {
  min-height: 100vh;
  margin: 0;
  overflow: hidden; /* Додано для приховування прокрутки */
-  /* Додано властивості для блокування виділення тексту */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
 }
 
 .coin {
@@ -81,6 +80,11 @@ coin.addEventListener('click', (event) => {
  setTimeout(() => {
   floatingText.remove();
  }, 500); // Затримка 500 мілісекунд
+});
+
+// Перехоплення подій виділення тексту
+document.addEventListener('selectstart', (event) => {
+ event.preventDefault(); // Запобігаємо стандартній поведінці виділення
 });
 </script>
 
