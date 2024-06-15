@@ -1,117 +1,270 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Красивий Клікер</title>
-<style>
-body {
-  background-color: #f0f0f0;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
+  <title>Neon Clicker</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-.container {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.clicker {
-  background-color: #4CAF50;
-  color: white;
-  padding: 20px 40px;
-  border: none;
-  border-radius: 5px;
-  font-size: 24px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .click-button {
+      width: 200px;
+      height: 200px;
+      background-color: #000;
+      border: 4px solid #0f0;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 200px;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px #0f0;
+      text-shadow: 0 0 5px #0f0;
+    }
 
-.clicker:hover {
-  background-color: #3e8e41;
-}
+    .click-button:hover {
+      box-shadow: 0 0 20px #0f0;
+      transform: scale(1.1);
+    }
 
-.counter {
-  font-size: 48px;
-  margin-top: 20px;
-}
+    .click-button:active {
+      transform: scale(0.95);
+    }
 
-.upgrades {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
-}
+    .click-count {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
 
-.upgrade {
-  background-color: #e0e0e0;
-  padding: 10px 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .upgrade-button {
+      background-color: #000;
+      color: #0f0;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 10px;
+    }
 
-.upgrade:hover {
-  background-color: #d0d0d0;
-}
+    .upgrade-button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
 
-.upgrade-name {
-  font-weight: bold;
-}
+    .upgrade-button:active {
+      transform: scale(0.95);
+    }
 
-.upgrade-cost {
-  font-size: 14px;
-}
-</style>
+    .upgrade-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .upgrade-name {
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+
+    .upgrade-cost {
+      font-size: 1.2rem;
+    }
+
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #222;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .nav-button {
+      background-color: #000;
+      color: #0f0;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+
+    .nav-button:active {
+      transform: scale(0.95);
+    }
+
+    .quest-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .quest-title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .quest-description {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .quest-button {
+      background-color: #000;
+      color: #0f0;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quest-button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+
+    .quest-button:active {
+      transform: scale(0.95);
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>Красивий Клікер</h1>
-  <button class="clicker">Натисніть мене!</button>
-  <div class="counter">0</div>
-  <div class="upgrades">
-    <div class="upgrade">
-      <div class="upgrade-name">Улучшення 1</div>
-      <div class="upgrade-cost">Вартість: 10</div>
+  <div class="container">
+    <div class="click-button" onclick="clickButton()">Click Me!</div>
+    <div class="click-count">Clicks: <span id="click-count">0</span></div>
+
+    <div id="upgrade-section">
+      <h2>Upgrades</h2>
+      <div class="upgrade-info">
+        <span class="upgrade-name">Click Power</span>
+        <span class="upgrade-cost" id="click-power-cost">10</span>
+      </div>
+      <button class="upgrade-button" onclick="upgradeClickPower()">Upgrade</button>
+
+      <div class="upgrade-info">
+        <span class="upgrade-name">Auto Clicker</span>
+        <span class="upgrade-cost" id="auto-clicker-cost">100</span>
+      </div>
+      <button class="upgrade-button" onclick="upgradeAutoClicker()">Upgrade</button>
     </div>
-    <div class="upgrade">
-      <div class="upgrade-name">Улучшення 2</div>
-      <div class="upgrade-cost">Вартість: 100</div>
+
+    <div id="quest-section" class="quest-section">
+      <h2 class="quest-title">Quests</h2>
+      <div class="quest-description">
+        Subscribe to our channel for a special bonus!
+      </div>
+      <button class="quest-button" onclick="completeQuest()">Subscribe Now</button>
     </div>
   </div>
-</div>
 
-<script>
-const clickerButton = document.querySelector('.clicker');
-const counterElement = document.querySelector('.counter');
-let count = 0;
+  <div class="nav-bar">
+    <button class="nav-button" onclick="showHome()">Home</button>
+    <button class="nav-button" onclick="showUpgrades()">Upgrades</button>
+    <button class="nav-button" onclick="showQuests()">Quests</button>
+  </div>
 
-clickerButton.addEventListener('click', () => {
-  count++;
-  counterElement.textContent = count;
-});
+  <script>
+    let clickCount = 0;
+    let clickPower = 1;
+    let autoClickerCount = 0;
+    let autoClickerInterval;
 
-const upgrades = document.querySelectorAll('.upgrade');
+    let clickPowerCost = 10;
+    let autoClickerCost = 100;
 
-upgrades.forEach(upgrade => {
-  upgrade.addEventListener('click', () => {
-    const cost = parseInt(upgrade.querySelector('.upgrade-cost').textContent.split(': ')[1]);
+    let questCompleted = false;
 
-    if (count >= cost) {
-      count -= cost;
-      counterElement.textContent = count;
-      // Додайте логіку для покращення клікера (наприклад, збільшення швидкості натискань)
-    } else {
-      alert('Недостатньо ресурсів!');
+    document.getElementById('click-count').textContent = clickCount;
+
+    function clickButton() {
+      clickCount += clickPower;
+      document.getElementById('click-count').textContent = clickCount;
     }
-  });
-});
-</script>
+
+    function upgradeClickPower() {
+      if (clickCount >= clickPowerCost) {
+        clickCount -= clickPowerCost;
+        clickPower *= 2;
+        clickPowerCost *= 3;
+        document.getElementById('click-count').textContent = clickCount;
+        document.getElementById('click-power-cost').textContent = clickPowerCost;
+      }
+    }
+
+    function upgradeAutoClicker() {
+      if (clickCount >= autoClickerCost) {
+        clickCount -= autoClickerCost;
+        autoClickerCount++;
+        autoClickerCost *= 3;
+        document.getElementById('click-count').textContent = clickCount;
+        document.getElementById('auto-clicker-cost').textContent = autoClickerCost;
+        startAutoClicker();
+      }
+    }
+
+    function startAutoClicker() {
+      clearInterval(autoClickerInterval);
+      autoClickerInterval = setInterval(() => {
+        clickCount += autoClickerCount;
+        document.getElementById('click-count').textContent = clickCount;
+      }, 1000);
+    }
+
+    function completeQuest() {
+      // Replace with your actual channel link
+      window.open('https://www.youtube.com/channel/your-channel-id', '_blank');
+      if (!questCompleted) {
+        clickCount += 1000;
+        document.getElementById('click-count').textContent = clickCount;
+        questCompleted = true;
+        document.getElementById('quest-section').style.display = 'none';
+      }
+    }
+
+    function showHome() {
+      document.getElementById('upgrade-section').style.display = 'none';
+      document.getElementById('quest-section').style.display = 'none';
+    }
+
+    function showUpgrades() {
+      document.getElementById('upgrade-section').style.display = 'block';
+      document.getElementById('quest-section').style.display = 'none';
+    }
+
+    function showQuests() {
+      document.getElementById('upgrade-section').style.display = 'none';
+      document.getElementById('quest-section').style.display = 'block';
+    }
+
+    // Initialize with Home page
+    showHome();
+  </script>
 </body>
 </html>
