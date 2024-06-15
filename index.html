@@ -84,6 +84,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  max-width: 300px; /* Встановили максимальну ширину для кращого вигляду */
 }
 
 .upgrade-item {
@@ -93,6 +95,7 @@ body {
   padding: 10px;
   background-color: #444;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .upgrade-title {
@@ -107,6 +110,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  max-width: 300px; /* Встановили максимальну ширину для кращого вигляду */
 }
 
 .quest-item {
@@ -150,8 +155,7 @@ body {
   </div>
 
   <div class="content" id="upgrade-content" style="display: none;">
-    <div class="upgrade-list" id="upgrade-list">
-      </div>
+    <div class="upgrade-list" id="upgrade-list"></div>
   </div>
 
   <div class="content" id="quest-content" style="display: none;">
@@ -195,12 +199,14 @@ clickerButton.addEventListener('click', () => {
 
 // Покращення
 function addUpgrade() {
-  const upgrade = {
-    power: 1,
-    price: upgradePrice
-  };
-  upgrades.push(upgrade);
-  renderUpgrades();
+  if (upgrades.length === 0) { // Додаємо покращення тільки якщо їх ще немає
+    const upgrade = {
+      power: 1,
+      price: upgradePrice
+    };
+    upgrades.push(upgrade);
+    renderUpgrades();
+  }
 }
 
 function renderUpgrades() {
@@ -236,6 +242,7 @@ questItems.forEach(questItem => {
         score += 500; 
         updateScore();
         questItem.classList.add('completed');
+        localStorage.setItem('quest_telegram', 'completed'); // Зберігаємо виконання квесту в localstorage
       }
     }
   });
