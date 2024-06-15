@@ -24,6 +24,10 @@ body {
  background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
  box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
  cursor: pointer;
+  -webkit-user-select: none; /* Для Chrome, Safari, Opera */
+  -moz-user-select: none; /* Для Firefox */
+  -ms-user-select: none; /* Для IE/Edge */
+  user-select: none; /* Стандартний */
 }
 
 .clicks {
