@@ -10,11 +10,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  font-family: sans-serif;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+ */
-  user-select: none; /* Standard */
+  overflow: hidden; /* Додано для приховування прокрутки */
 }
 
 .coin {
@@ -24,12 +20,11 @@ body {
   background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
   box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
   cursor: pointer;
-  outline: none; 
 }
 
 .clicks {
   position: absolute;
-  top: 25%;
+  top: 25%; /* Змінено на 25% */
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
@@ -37,56 +32,13 @@ body {
   text-shadow: 0 0 5px black;
 }
 
-.menu-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #333;
-  padding: 10px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top-left-radius: 10px; /* Додано округлення лівого верхнього кута */
-  border-top-right-radius: 10px; /* Додано округлення правого верхнього кута */
-}
-
-.menu-button {
-  display: flex;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-}
-
-.menu-button i {
-  font-size: 24px;
-  margin-right: 5px;
-}
-
-/* Стиль для сторінок */
-.page {
-  display: none; /* приховати сторінки спочатку */
+.floating-text {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #111;
-  color: white;
-  padding: 20px;
   font-size: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Додано стиль, щоб вимкнути виділення */
-.page, .menu-bar, .coin, .clicks {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+ */
-  user-select: none; /* Standard */
+  color: white;
+  text-shadow: 0 0 5px black;
+  opacity: 1; /* Початкова непрозорість */
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Додано перехід для плавної анімації */
 }
 </style>
 </head>
@@ -95,63 +47,36 @@ body {
 <div class="coin"></div>
 <div class="clicks">0</div>
 
-<div class="menu-bar">
-  <div class="menu-button" id="quests-button">
-    ❓ Квести
-  </div>
-  <div class="menu-button" id="main-button">
-    🏠 Головна
-  </div>
-  <div class="menu-button" id="other-button">
-    ⚙️ Інше
-  </div>
-</div>
-
-<div id="quests-page" class="page">
-  <h1>Сторінка квестів</h1>
-  <p>Тут будуть квести.</p>
-</div>
-
-<div id="main-page" class="page">
-  <h1>Головна сторінка</h1>
-  <p>Тут буде основний контент.</p>
-</div>
-
-<div id="other-page" class="page">
-  <h1>Сторінка "Інше"</h1>
-  <p>Тут буде інший контент.</p>
-</div>
-
 <script>
 const coin = document.querySelector('.coin');
 const clicksDisplay = document.querySelector('.clicks');
 let clicks = 0;
 
-coin.addEventListener('click', () => {
+coin.addEventListener('click', (event) => {
   clicks++;
   clicksDisplay.textContent = clicks;
+
+  // Створення нового елемента тексту
+  const floatingText = document.createElement('div');
+  floatingText.classList.add('floating-text');
+  floatingText.textContent = '+1';
+
+  // Встановлення позиції тексту
+  floatingText.style.top = `${event.clientY}px`;
+  floatingText.style.left = `${event.clientX}px`;
+
+  // Додавання тексту до документа
+  document.body.appendChild(floatingText);
+
+  // Анімація тексту
+  floatingText.style.top = `${event.clientY - 100}px`; // Зміна позиції на 100 пікселів вгору
+  floatingText.style.opacity = 0; // Зміна непрозорості на 0
+
+  // Видалення тексту після завершення анімації
+  setTimeout(() => {
+    floatingText.remove();
+  }, 500); // Затримка 500 мілісекунд
 });
-
-const questsButton = document.getElementById('quests-button');
-const mainButton = document.getElementById('main-button');
-const otherButton = document.getElementById('other-button');
-const questsPage = document.getElementById('quests-page');
-const mainPage = document.getElementById('main-page');
-const otherPage = document.getElementById('other-page');
-
-function showPage(page) {
-  questsPage.style.display = 'none';
-  mainPage.style.display = 'none';
-  otherPage.style.display = 'none';
-  page.style.display = 'block';
-}
-
-questsButton.addEventListener('click', () => showPage(questsPage));
-mainButton.addEventListener('click', () => showPage(mainPage));
-otherButton.addEventListener('click', () => showPage(otherPage));
-
-// Show the main page initially
-showPage(mainPage);
 </script>
 
 </body>
