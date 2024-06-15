@@ -4,49 +4,48 @@
 <title>Клікер</title>
 <style>
 body {
- background-color: black;
- display: flex;
- justify-content: center;
- align-items: center;
- min-height: 100vh;
- margin: 0;
- overflow: hidden; /* Додано для приховування прокрутки */
- -webkit-user-select: none;
- -moz-user-select: none;
- -ms-user-select: none;
- user-select: none;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden; /* Додано для приховування прокрутки */
+  -webkit-user-select: none; /* Забороняємо виділення за допомогою браузера */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .coin {
- width: 150px;
- height: 150px;
- border-radius: 50%;
- background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
- box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
- cursor: pointer;
-  -webkit-user-select: none; /* Для Chrome, Safari, Opera */
-  -moz-user-select: none; /* Для Firefox */
-  -ms-user-select: none; /* Для IE/Edge */
-  user-select: none; /* Стандартний */
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
+  box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
+  cursor: pointer;
+  /* Додаємо фонове зображення, яке буде використовуватися при виділенні */
+  background-image: url('ваше-зображення.png'); /* Замініть на шлях до вашого зображення */
+  background-size: cover;
 }
 
 .clicks {
- position: absolute;
- top: 25%; /* Змінено на 25% */
- left: 50%;
- transform: translate(-50%, -50%);
- font-size: 30px;
- color: white;
- text-shadow: 0 0 5px black;
+  position: absolute;
+  top: 25%; /* Змінено на 25% */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: white;
+  text-shadow: 0 0 5px black;
 }
 
 .floating-text {
- position: absolute;
- font-size: 20px;
- color: white;
- text-shadow: 0 0 5px black;
- opacity: 1; /* Початкова непрозорість */
- transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Додано перехід для плавної анімації */
+  position: absolute;
+  font-size: 20px;
+  color: white;
+  text-shadow: 0 0 5px black;
+  opacity: 1; /* Початкова непрозорість */
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Додано перехід для плавної анімації */
 }
 </style>
 </head>
@@ -61,34 +60,47 @@ const clicksDisplay = document.querySelector('.clicks');
 let clicks = 0;
 
 coin.addEventListener('click', (event) => {
- clicks++;
- clicksDisplay.textContent = clicks;
+  clicks++;
+  clicksDisplay.textContent = clicks;
 
- // Створення нового елемента тексту
- const floatingText = document.createElement('div');
- floatingText.classList.add('floating-text');
- floatingText.textContent = '+1';
+  // Створення нового елемента тексту
+  const floatingText = document.createElement('div');
+  floatingText.classList.add('floating-text');
+  floatingText.textContent = '+1';
 
- // Встановлення позиції тексту
- floatingText.style.top = `${event.clientY}px`;
- floatingText.style.left = `${event.clientX}px`;
+  // Встановлення позиції тексту
+  floatingText.style.top = `${event.clientY}px`;
+  floatingText.style.left = `${event.clientX}px`;
 
- // Додавання тексту до документа
- document.body.appendChild(floatingText);
+  // Додавання тексту до документа
+  document.body.appendChild(floatingText);
 
- // Анімація тексту
- floatingText.style.top = `${event.clientY - 100}px`; // Зміна позиції на 100 пікселів вгору
- floatingText.style.opacity = 0; // Зміна непрозорості на 0
+  // Анімація тексту
+  floatingText.style.top = `${event.clientY - 100}px`; // Зміна позиції на 100 пікселів вгору
+  floatingText.style.opacity = 0; // Зміна непрозорості на 0
 
- // Видалення тексту після завершення анімації
- setTimeout(() => {
-  floatingText.remove();
- }, 500); // Затримка 500 мілісекунд
+  // Видалення тексту після завершення анімації
+  setTimeout(() => {
+    floatingText.remove();
+  }, 500); // Затримка 500 мілісекунд
 });
 
 // Перехоплення подій виділення тексту
 document.addEventListener('selectstart', (event) => {
- event.preventDefault(); // Запобігаємо стандартній поведінці виділення
+  event.preventDefault(); // Запобігаємо стандартній поведінці виділення
+  // Перевірка, чи виділяється елемент .coin
+  if (event.target.classList.contains('coin')) {
+    // Встановлення фонового зображення
+    coin.style.backgroundImage = 'url("ваше-зображення.png")';
+  }
+});
+
+// Відновлення фону
+document.addEventListener('mouseup', (event) => {
+  if (event.target.classList.contains('coin')) {
+    // Відновлення фонового зображення
+    coin.style.backgroundImage = 'radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%)';
+  }
 });
 </script>
 
