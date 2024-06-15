@@ -10,7 +10,6 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  overflow: hidden; /* Додано для приховування прокрутки */
 }
 
 .coin {
@@ -20,6 +19,8 @@ body {
   background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
   box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
   cursor: pointer;
+  /* Додано стиль, щоб прибрати синій квадрат */
+  outline: none; 
 }
 
 .clicks {
@@ -30,15 +31,6 @@ body {
   font-size: 30px;
   color: white;
   text-shadow: 0 0 5px black;
-}
-
-.floating-text {
-  position: absolute;
-  font-size: 20px;
-  color: white;
-  text-shadow: 0 0 5px black;
-  opacity: 1; /* Початкова непрозорість */
-  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Додано перехід для плавної анімації */
 }
 </style>
 </head>
@@ -52,30 +44,9 @@ const coin = document.querySelector('.coin');
 const clicksDisplay = document.querySelector('.clicks');
 let clicks = 0;
 
-coin.addEventListener('click', (event) => {
+coin.addEventListener('click', () => {
   clicks++;
   clicksDisplay.textContent = clicks;
-
-  // Створення нового елемента тексту
-  const floatingText = document.createElement('div');
-  floatingText.classList.add('floating-text');
-  floatingText.textContent = '+1';
-
-  // Встановлення позиції тексту
-  floatingText.style.top = `${event.clientY}px`;
-  floatingText.style.left = `${event.clientX}px`;
-
-  // Додавання тексту до документа
-  document.body.appendChild(floatingText);
-
-  // Анімація тексту
-  floatingText.style.top = `${event.clientY - 100}px`; // Зміна позиції на 100 пікселів вгору
-  floatingText.style.opacity = 0; // Зміна непрозорості на 0
-
-  // Видалення тексту після завершення анімації
-  setTimeout(() => {
-    floatingText.remove();
-  }, 500); // Затримка 500 мілісекунд
 });
 </script>
 
