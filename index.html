@@ -14,7 +14,7 @@ body {
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+ */
-  user-select: none; /* Standard syntax */
+  user-select: none; /* Standard */
 }
 
 .coin {
@@ -29,7 +29,7 @@ body {
 
 .clicks {
   position: absolute;
-  top: 25%; 
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
@@ -47,8 +47,8 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top-left-radius: 20px; /* Додано закруглення кутів */
-  border-top-right-radius: 20px;
+  border-top-left-radius: 10px; /* Додано округлення лівого верхнього кута */
+  border-top-right-radius: 10px; /* Додано округлення правого верхнього кута */
 }
 
 .menu-button {
@@ -63,23 +63,30 @@ body {
   margin-right: 5px;
 }
 
-/* Приховуємо смайлики */
-.emoji {
-  display: none;
+/* Стиль для сторінок */
+.page {
+  display: none; /* приховати сторінки спочатку */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  color: white;
+  padding: 20px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Стилі для сторінок */
-#quests-page, #main-page, #other-page {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  display: none;
-  z-index: 1; /* Додано з-індекс для виведення над кнопками */
+/* Додано стиль, щоб вимкнути виділення */
+.page, .menu-bar, .coin, .clicks {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
 }
 </style>
 </head>
@@ -90,27 +97,27 @@ body {
 
 <div class="menu-bar">
   <div class="menu-button" id="quests-button">
-    <i class="emoji" role="img" aria-label="Квест">❓</i> Квести
+    ❓ Квести
   </div>
   <div class="menu-button" id="main-button">
-    <i class="emoji" role="img" aria-label="Головна">🏠</i> Головна
+    🏠 Головна
   </div>
   <div class="menu-button" id="other-button">
-    <i class="emoji" role="img" aria-label="Інше">⚙️</i> Інше
+    ⚙️ Інше
   </div>
 </div>
 
-<div id="quests-page">
+<div id="quests-page" class="page">
   <h1>Сторінка квестів</h1>
   <p>Тут будуть квести.</p>
 </div>
 
-<div id="main-page">
+<div id="main-page" class="page">
   <h1>Головна сторінка</h1>
   <p>Тут буде основний контент.</p>
 </div>
 
-<div id="other-page">
+<div id="other-page" class="page">
   <h1>Сторінка "Інше"</h1>
   <p>Тут буде інший контент.</p>
 </div>
@@ -144,7 +151,7 @@ mainButton.addEventListener('click', () => showPage(mainPage));
 otherButton.addEventListener('click', () => showPage(otherPage));
 
 // Show the main page initially
-showPage(mainPage); 
+showPage(mainPage);
 </script>
 
 </body>
