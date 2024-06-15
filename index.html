@@ -11,6 +11,10 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: sans-serif;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard syntax */
 }
 
 .coin {
@@ -20,13 +24,12 @@ body {
   background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
   box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
   cursor: pointer;
-  /* Додано стиль, щоб прибрати синій квадрат */
   outline: none; 
 }
 
 .clicks {
   position: absolute;
-  top: 25%; /* Змінено на 25% */
+  top: 25%; 
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
@@ -44,6 +47,8 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-top-left-radius: 20px; /* Додано закруглення кутів */
+  border-top-right-radius: 20px;
 }
 
 .menu-button {
@@ -56,6 +61,25 @@ body {
 .menu-button i {
   font-size: 24px;
   margin-right: 5px;
+}
+
+/* Приховуємо смайлики */
+.emoji {
+  display: none;
+}
+
+/* Стилі для сторінок */
+#quests-page, #main-page, #other-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1; /* Додано з-індекс для виведення над кнопками */
 }
 </style>
 </head>
@@ -76,17 +100,17 @@ body {
   </div>
 </div>
 
-<div id="quests-page" style="display: none;">
+<div id="quests-page">
   <h1>Сторінка квестів</h1>
   <p>Тут будуть квести.</p>
 </div>
 
-<div id="main-page" style="display: none;">
+<div id="main-page">
   <h1>Головна сторінка</h1>
   <p>Тут буде основний контент.</p>
 </div>
 
-<div id="other-page" style="display: none;">
+<div id="other-page">
   <h1>Сторінка "Інше"</h1>
   <p>Тут буде інший контент.</p>
 </div>
