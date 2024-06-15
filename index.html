@@ -10,6 +10,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
+  flex-direction: column; /* Додає вертикальне розташування */
 }
 
 .coin {
@@ -19,13 +20,10 @@ body {
   background: radial-gradient(circle at 50% 50%, #ffcc00 0%, #ffff00 50%, #ffcc00 100%);
   box-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00 inset;
   cursor: pointer;
+  margin-bottom: 20px; /* Додає відступ знизу від кнопки */
 }
 
 .clicks {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 30px;
   color: white;
   text-shadow: 0 0 5px black;
@@ -34,8 +32,8 @@ body {
 </head>
 <body>
 
+<div class="clicks">0</div>  <!-- Змінено порядок елементів -->
 <div class="coin"></div>
-<div class="clicks">0</div>
 
 <script>
 const coin = document.querySelector('.coin');
