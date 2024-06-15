@@ -120,6 +120,19 @@ body {
 .quest-item.completed {
   background-color: #555;
 }
+
+.telegram-button {
+  background-color: #0088cc;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.telegram-button:hover {
+  background-color: #0077bb;
+}
 </style>
 </head>
 <body>
@@ -143,7 +156,9 @@ body {
 
   <div class="content" id="quest-content" style="display: none;">
     <div class="quest-list">
-      <div class="quest-item" data-quest="telegram">Підпишіться на наш канал в Телеграм: <a href="https://t.me/your_channel" target="_blank">t.me/your_channel</a></div>
+      <div class="quest-item" data-quest="telegram">Підпишіться на наш канал в Телеграм: 
+        <a href="https://t.me/your_channel" target="_blank" class="telegram-button">t.me/your_channel</a>
+      </div>
     </div>
   </div>
 </div>
@@ -153,7 +168,6 @@ let score = 0;
 let clickPower = 1;
 let upgradePrice = 5;
 let upgrades = [];
-let completedQuests = [];
 
 const scoreElement = document.querySelector('.score');
 const clickerButton = document.querySelector('.clicker-button');
@@ -171,7 +185,6 @@ function updateScore() {
   localStorage.setItem('clickPower', clickPower);
   localStorage.setItem('upgradePrice', upgradePrice);
   localStorage.setItem('upgrades', JSON.stringify(upgrades));
-  localStorage.setItem('completedQuests', JSON.stringify(completedQuests));
 }
 
 // Клікер
@@ -220,11 +233,9 @@ questItems.forEach(questItem => {
     if (!questItem.classList.contains('completed')) {
       const quest = questItem.dataset.quest;
       if (quest === 'telegram') {
-        score += 2000;
+        score += 500; 
         updateScore();
         questItem.classList.add('completed');
-        completedQuests.push(quest);
-        updateScore();
       }
     }
   });
@@ -254,27 +265,24 @@ menuItems.forEach(menuItem => {
 });
 
 // Завантаження збережень
-function loadGame() {
+function loadSavedData() {
   score = parseInt(localStorage.getItem('score')) || 0;
   clickPower = parseInt(localStorage.getItem('clickPower')) || 1;
   upgradePrice = parseInt(localStorage.getItem('upgradePrice')) || 5;
   upgrades = JSON.parse(localStorage.getItem('upgrades')) || [];
-  completedQuests = JSON.parse(localStorage.getItem('completedQuests')) || [];
 
-  // Оновлення стану квестів
-  completedQuests.forEach(quest => {
-    const questItem = questList.querySelector(`.quest-item[data-quest="${quest}"]`);
-    if (questItem) {
-      questItem.classList.add('completed');
+  // Перевірка виконання квестів
+  const telegramQuest = questList.querySelector('[data-quest="telegram"]');
+  if (telegramQuest) {
+    if (localStorage.getItem('quest_telegram') === 'completed') {
+      telegramQuest.classList.add('completed');
     }
-  });
-
-  updateScore();
-  renderUpgrades();
+  }
 }
 
 // Початкове налаштування
-loadGame();
+loadSavedData();
+updateScore();
 addUpgrade();
 renderUpgrades();
 </script>
