@@ -4,126 +4,195 @@
 <title>Клікер</title>
 <style>
 body {
-  background-color: #333;
-  color: #fff;
+  margin: 0;
+  padding: 0;
   font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #222;
+}
+
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
 }
 
-.button {
-  background-color: #000;
-  border: none;
+.click-button {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  color: #fff;
+  background: linear-gradient(to bottom, #444, #000);
+  border: none;
   cursor: pointer;
-  font-size: 24px;
-  padding: 20px 40px;
-  text-align: center;
-  user-select: none; /* Заборона виділення тексту */
-  -webkit-user-select: none; /* Для Safari */
-  -moz-user-select: none; /* Для Firefox */
-  -ms-user-select: none; /* Для IE 10+ */
+  user-select: none; /* Запобігає виділенню */
 }
 
-.button:hover {
-  background-color: #222;
+.click-button:active {
+  box-shadow: 0 0 10px #fff;
 }
 
 .menu-panel {
-  background-color: #222;
-  padding: 10px;
-  margin-top: 20px;
   display: flex;
   justify-content: space-around;
   width: 100%;
-  max-width: 500px;
+  margin-top: 20px;
 }
 
-.menu-button {
+.menu-item {
   background-color: #444;
-  border: none;
+  padding: 10px;
   border-radius: 5px;
-  color: #fff;
   cursor: pointer;
-  font-size: 16px;
-  padding: 8px 16px;
-  text-align: center;
+  user-select: none;
 }
 
-.menu-button:hover {
+.menu-item.active {
   background-color: #555;
 }
 
-.menu-content {
-  display: none; /* За замовчуванням приховуємо всі меню */
+.stats {
   margin-top: 20px;
   text-align: center;
 }
 
-.menu-content.active {
-  display: block;
+.upgrade-menu {
+  display: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+.upgrade-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.upgrade-item button {
+  background-color: #555;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.quest-menu {
+  display: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+.quest-item {
+  margin-bottom: 10px;
+}
+
+.quest-item button {
+  background-color: #555;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
 }
 </style>
 </head>
 <body>
+<div class="container">
+  <div class="click-button"></div>
+  <div class="stats">
+    <p>Кліків: <span id="clicks">0</span></p>
+    <p>Сила: <span id="power">1</span></p>
+  </div>
+  <div class="menu-panel">
+    <div class="menu-item active" id="main-menu">Головне</div>
+    <div class="menu-item" id="upgrade-menu">Покращення</div>
+    <div class="menu-item" id="quest-menu">Квести</div>
+  </div>
 
-<div class="button" onclick="clickCounter()">Натисніть мене!</div>
-<div id="click-count">0</div>
+  <div class="upgrade-menu">
+    <div class="upgrade-item">
+      <span>Збільшення сили</span>
+      <span>Ціна: <span id="upgrade-price">5</span></span>
+      <button id="upgrade-button">Купити</button>
+    </div>
+  </div>
 
-<div class="menu-panel">
-  <button class="menu-button" onclick="showMenu('power-menu')">Сила кліку</button>
-  <button class="menu-button" onclick="showMenu('main-menu')">Головне меню</button>
-  <button class="menu-button" onclick="showMenu('quests-menu')">Квести</button>
-</div>
-
-<div class="menu-content" id="power-menu">
-  <h2>Покращення сили кліку</h2>
-  <p>Тут будуть опції для покращення сили кліку.</p>
-</div>
-
-<div class="menu-content" id="main-menu">
-  <h2>Головне меню</h2>
-  <p>Тут буде головне меню гри.</p>
-</div>
-
-<div class="menu-content" id="quests-menu">
-  <h2>Квести</h2>
-  <p>Перейдіть на головну сторінку YouTube, щоб отримати 2000 очок.</p>
-  <button class="menu-button" onclick="completeQuest()">Завершити квест</button>
+  <div class="quest-menu">
+    <div class="quest-item">
+      <span>Підпишись на телеграм канал:</span>
+      <button id="quest-button">Отримати нагороду</button>
+    </div>
+  </div>
 </div>
 
 <script>
-let clickCount = 0;
-let questCompleted = false;
+const clickButton = document.querySelector('.click-button');
+const clicksSpan = document.getElementById('clicks');
+const powerSpan = document.getElementById('power');
+const upgradeButton = document.getElementById('upgrade-button');
+const upgradePriceSpan = document.getElementById('upgrade-price');
+const questButton = document.getElementById('quest-button');
 
-function clickCounter() {
-  clickCount++;
-  document.getElementById("click-count").innerHTML = clickCount;
-}
+let clicks = 0;
+let power = 1;
+let upgradePrice = 5;
 
-function showMenu(menuId) {
-  const menus = document.querySelectorAll('.menu-content');
-  menus.forEach(menu => menu.classList.remove('active'));
+clickButton.addEventListener('click', () => {
+  clicks += power;
+  clicksSpan.textContent = clicks;
+});
 
-  document.getElementById(menuId).classList.add('active');
-}
-
-function completeQuest() {
-  if (!questCompleted) {
-    clickCount += 2000;
-    document.getElementById("click-count").innerHTML = clickCount;
-    questCompleted = true;
-    alert("Квест завершено! Ви отримали 2000 очок!");
-  } else {
-    alert("Цей квест вже завершено!");
+upgradeButton.addEventListener('click', () => {
+  if (clicks >= upgradePrice) {
+    clicks -= upgradePrice;
+    clicksSpan.textContent = clicks;
+    power++;
+    powerSpan.textContent = power;
+    upgradePrice *= 5;
+    upgradePriceSpan.textContent = upgradePrice;
   }
-}
-</script>
+});
 
+questButton.addEventListener('click', () => {
+  // Тут додайте код для перевірки виконання квесту
+  // наприклад, перевірку чи користувач підписаний на телеграм канал
+  if (/* умові виконання квесту */) {
+    clicks += 2000;
+    clicksSpan.textContent = clicks;
+    alert('Виконано квест!');
+  }
+});
+
+// Обробка меню
+const mainMenu = document.getElementById('main-menu');
+const upgradeMenu = document.getElementById('upgrade-menu');
+const questMenu = document.getElementById('quest-menu');
+const menuItems = document.querySelectorAll('.menu-item');
+
+menuItems.forEach(item => {
+  item.addEventListener('click', () => {
+    menuItems.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    if (item === mainMenu) {
+      upgradeMenu.style.display = 'none';
+      questMenu.style.display = 'none';
+    } else if (item === upgradeMenu) {
+      upgradeMenu.style.display = 'flex';
+      questMenu.style.display = 'none';
+    } else if (item === questMenu) {
+      upgradeMenu.style.display = 'none';
+      questMenu.style.display = 'flex';
+    }
+  });
+});
+</script>
 </body>
 </html>
