@@ -10,7 +10,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  overflow: hidden; /* Додано, щоб запобігти переміщенню скролу */
+  overflow: hidden; /* Додано для приховування прокрутки */
 }
 
 .coin {
@@ -32,13 +32,13 @@ body {
   text-shadow: 0 0 5px black;
 }
 
-.click-text {
+.floating-text {
   position: absolute;
-  font-size: 24px;
+  font-size: 20px;
   color: white;
   text-shadow: 0 0 5px black;
-  opacity: 1;
-  transition: opacity 1s ease, transform 1s ease;
+  opacity: 1; /* Початкова непрозорість */
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Додано перехід для плавної анімації */
 }
 </style>
 </head>
@@ -56,23 +56,26 @@ coin.addEventListener('click', (event) => {
   clicks++;
   clicksDisplay.textContent = clicks;
 
-  const clickText = document.createElement('div');
-  clickText.classList.add('click-text');
-  clickText.textContent = '+1';
+  // Створення нового елемента тексту
+  const floatingText = document.createElement('div');
+  floatingText.classList.add('floating-text');
+  floatingText.textContent = '+1';
 
-  // Визначити позицію кліку
-  clickText.style.left = event.clientX + 'px';
-  clickText.style.top = event.clientY + 'px';
+  // Встановлення позиції тексту
+  floatingText.style.top = `${event.clientY}px`;
+  floatingText.style.left = `${event.clientX}px`;
 
-  document.body.appendChild(clickText);
+  // Додавання тексту до документа
+  document.body.appendChild(floatingText);
 
-  // Анімація руху вгору і зникнення
-  clickText.style.transform = 'translateY(-100px)';
-  clickText.style.opacity = 0;
+  // Анімація тексту
+  floatingText.style.top = `${event.clientY - 100}px`; // Зміна позиції на 100 пікселів вгору
+  floatingText.style.opacity = 0; // Зміна непрозорості на 0
 
+  // Видалення тексту після завершення анімації
   setTimeout(() => {
-    document.body.removeChild(clickText);
-  }, 1000);
+    floatingText.remove();
+  }, 500); // Затримка 500 мілісекунд
 });
 </script>
 
