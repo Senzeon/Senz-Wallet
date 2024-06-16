@@ -1,1 +1,142 @@
-# Hello
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Клікер</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+    #clicker {
+      width: 200px;
+      height: 200px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    #menu {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f2f2f2;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+    #menu button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Клікер</h1>
+    <div id="clicker"></div>
+    <div id="stats">
+      <p>Кліків: <span id="clickCount">0</span></p>
+      <p>Рівень покращення: <span id="upgradeLevel">0</span></p>
+      <p>Автоклікер: <span id="autoClicker">Не куплено</span></p>
+    </div>
+  </div>
+  <div id="menu">
+    <button id="main">Головне</button>
+    <button id="upgrade">Покращення</button>
+    <button id="autoClickerBtn">Автоклікер</button>
+    <button id="quests">Квести</button>
+  </div>
+
+  <script>
+    // Конфігурація Firebase
+    const firebaseConfig = {
+      // Your Firebase configuration goes here
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Отримання імені користувача з localStorage
+    const telegramUsername = localStorage.getItem('telegramUsername');
+
+    // Перевірка чи користувач зареєстрований
+    const isRegistered = localStorage.getItem('registered');
+    
+    if (!isRegistered) {
+      // Якщо користувач не зареєстрований - перенаправлення на сторінку реєстрації
+      window.location.href = 'index.html';
+    } else {
+      // Отримання даних користувача з Firebase
+      const userRef = database.ref('users/' + telegramUsername);
+
+      // Отримання даних користувача з Firebase
+      userRef.on('value', (snapshot) => {
+        const userData = snapshot.val();
+        document.getElementById('clickCount').textContent = userData.clicks;
+        document.getElementById('upgradeLevel').textContent = userData.upgradeLevel;
+        document.getElementById('autoClicker').textContent = userData.autoClicker ? 'Куплено' : 'Не куплено';
+      });
+
+      // Керування кліками
+      let clickCount = parseInt(document.getElementById('clickCount').textContent);
+      let upgradeLevel = parseInt(document.getElementById('upgradeLevel').textContent);
+
+      // Функція для оновлення кількості кліків
+      function updateClickCount() {
+        clickCount++;
+        document.getElementById('clickCount').textContent = clickCount;
+        userRef.update({ clicks: clickCount });
+      }
+
+      // Обробка кліків на клікер
+      document.getElementById('clicker').addEventListener('click', updateClickCount);
+
+      // Керування покращенням
+      document.getElementById('upgrade').addEventListener('click', () => {
+        // Логіка покращення
+        upgradeLevel++;
+        document.getElementById('upgradeLevel').textContent = upgradeLevel;
+        userRef.update({ upgradeLevel: upgradeLevel });
+      });
+
+      // Керування автоклікером
+      document.getElementById('autoClickerBtn').addEventListener('click', () => {
+        // Логіка купівлі автоклікера
+        userRef.update({ autoClicker: true });
+        // Додайте логіку для запуску автоклікера
+      });
+
+      // Керування квестами
+      document.getElementById('quests').addEventListener('click', () => {
+        // Логіка квестів
+        // Відкрийте окреме меню з квестами
+        // Додайте логіку для виконання квестів
+      });
+
+      // Керування меню
+      document.getElementById('main').addEventListener('click', () => {
+        // Перехід на головне меню
+      });
+      document.getElementById('upgrade').addEventListener('click', () => {
+        // Перехід на меню покращення
+      });
+      document.getElementById('autoClickerBtn').addEventListener('click', () => {
+        // Перехід на меню автоклікера
+      });
+      document.getElementById('quests').addEventListener('click', () => {
+        // Перехід на меню квестів
+      });
+    }
+  </script>
+</body>
+</html>
