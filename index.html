@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Перехід на головну сторінку</title>
-<script>
-  // Перевіряємо, чи користувач вже зареєстрований
-  if (localStorage.getItem("registered") === "true") {
-    // Якщо так, то перенаправляємо на головну сторінку
-    window.location.href = "index.html";
-  } else {
-    // Якщо ні, то показуємо форму реєстрації
-    document.addEventListener("DOMContentLoaded", function() {
-      const form = document.getElementById("registrationForm");
-      form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        // Зберігаємо дані користувача в локальному сховищі
-        localStorage.setItem("registered", "true");
-        // Перенаправляємо користувача на головну сторінку
-        window.location.href = "index.html";
-      });
-    });
-  }
-</script>
+  <title>Реєстрація</title>
+  <script>
+    // Функція для перевірки, чи користувач вже зареєстрований
+    function isRegistered() {
+      return localStorage.getItem('registered') === 'true';
+    }
+
+    // Функція для реєстрації користувача
+    function register() {
+      localStorage.setItem('registered', 'true');
+      window.location.href = 'Glowna.html'; // Перехід на головну сторінку
+    }
+
+    // Перевірка, чи користувач вже зареєстрований
+    if (isRegistered()) {
+      window.location.href = 'Glowna.html'; // Перехід на головну сторінку
+    } else {
+      // Відображення форми реєстрації
+      document.write(`
+        <h1>Реєстрація</h1>
+        <button onclick="register()">Зареєструватися</button>
+      `);
+    }
+  </script>
 </head>
 <body>
-
-<h1>Реєстрація</h1>
-
-<form id="registrationForm">
-  <label for="username">Ім'я користувача:</label><br>
-  <input type="text" id="username" name="username"><br><br>
-  <button type="submit">Зареєструватися</button>
-</form>
-
 </body>
 </html>
