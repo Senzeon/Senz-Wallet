@@ -1,67 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Клікер</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
+ <title>Клікер</title>
+ <style>
+  body {
+   font-family: sans-serif;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   height: 100vh;
+   margin: 0;
+  }
 
-    #counter {
-      font-size: 3em;
-      margin-bottom: 20px;
-    }
+  #counter {
+   font-size: 3em;
+   margin-bottom: 20px;
+  }
 
-    button {
-      padding: 10px 20px;
-      font-size: 1.2em;
-      cursor: pointer;
-    }
-  </style>
+  button {
+   padding: 10px 20px;
+   font-size: 1.2em;
+   cursor: pointer;
+  }
+ </style>
 </head>
 <body>
-  <div id="counter">0</div>
-  <button id="clicker">Натисніть</button>
+ <div id="counter">0</div>
+ <button id="clicker">Натисніть</button>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-  <script>
-    // Замініть місця заповнювача на власні ключі конфігурації
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJ6RFbX9Al2pAl-mHkUDaXE0mQ8jXaTY",
-      authDomain: "senzwallet.firebaseapp.com",
-      databaseURL: "https://senzwallet-default-rtdb.firebaseio.com",
-      projectId: "senzwallet",
-      storageBucket: "senzwallet.appspot.com",
-      messagingSenderId: "643848239511",
-      appId: "1:643848239511:web:a29dd890890503968dacd2"
-    };
+ <script>
+  // Замініть місця заповнювача на власні ключі конфігурації
+  const firebaseConfig = {
+   apiKey: "AIzaSyAZJ6RFbX9Al2pAl-mHkUDaXE0mQ8jXaTY",
+   authDomain: "senzwallet.firebaseapp.com",
+   databaseURL: "https://senzwallet-default-rtdb.firebaseio.com",
+   projectId: "senzwallet",
+   storageBucket: "senzwallet.appspot.com",
+   messagingSenderId: "643848239511",
+   appId: "1:643848239511:web:a29dd890890503968dacd2"
+  };
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const counterRef = database.ref('counter');
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  const counterRef = database.ref('counter');
 
-    let count = 0;
+  // Оновлення лічильника з бази даних
+  counterRef.on('value', (snapshot) => {
+   document.getElementById('counter').innerText = snapshot.val();
+  });
 
-    // Оновлення лічильника з бази даних
-    counterRef.on('value', (snapshot) => {
-      count = snapshot.val() || 0;
-      document.getElementById('counter').innerText = count;
-    });
-
-    // Обробка натискання кнопки
-    document.getElementById('clicker').addEventListener('click', () => {
-      count++;
-      document.getElementById('counter').innerText = count;
-      counterRef.set(count);
-    });
-  </script>
+  // Обробка натискання кнопки
+  document.getElementById('clicker').addEventListener('click', () => {
+   counterRef.transaction(function(currentCount) {
+     return currentCount + 1;
+   });
+  });
+ </script>
 </body>
 </html>
