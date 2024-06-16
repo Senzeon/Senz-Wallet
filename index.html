@@ -2,30 +2,19 @@
 <html>
 <head>
   <title>Реєстрація</title>
-  <script>
-    // Функція для перевірки, чи користувач вже зареєстрований
-    function isRegistered() {
-      return localStorage.getItem('registered') === 'true';
-    }
-
-    // Функція для реєстрації користувача
-    function register() {
-      localStorage.setItem('registered', 'true');
-      window.location.href = 'Glowna.html'; // Перехід на головну сторінку
-    }
-
-    // Перевірка, чи користувач вже зареєстрований
-    if (isRegistered()) {
-      window.location.href = 'Glowna.html'; // Перехід на головну сторінку
-    } else {
-      // Відображення форми реєстрації
-      document.write(`
-        <h1>Реєстрація</h1>
-        <button onclick="register()">Зареєструватися</button>
-      `);
-    }
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 </head>
 <body>
+  <h1>Реєстрація</h1>
+  <form id="registrationForm">
+    <label for="username">Ім'я користувача:</label>
+    <input type="text" id="username" name="username" required><br><br>
+    <button type="submit">Зареєструватись</button>
+  </form>
+  <script>
+    // ... ваш код з firebase config та обробки форми (див. нижче)
+  </script>
 </body>
 </html>
