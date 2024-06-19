@@ -1,199 +1,241 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Neon Clicker</title>
-<style>
-body {
-  background-color: #000;
-  color: #ff0;
-  font-family: monospace;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Неоновий клікер</title>
+  <style>
+    body {
+      background-color: black;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-.coin {
-  width: 100px;
-  height: 100px;
-  background-color: #ff0;
-  border-radius: 50%;
-  position: relative;
-  cursor: pointer;
-  box-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
-  animation: glow 1s infinite alternate;
-}
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-.coin::before {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 80px;
-  height: 80px;
-  background-color: #000;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
-}
+    .coin {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: gold;
+      box-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
+      cursor: pointer;
+    }
 
-.coin::after {
-  content: "";
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 60px;
-  height: 60px;
-  background-color: #ff0;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
-}
+    .click-count {
+      font-size: 24px;
+      margin-top: 10px;
+    }
 
-@keyframes glow {
-  0% {
-    box-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
-  }
-  100% {
-    box-shadow: 0 0 20px #ff0, 0 0 40px #ff0, 0 0 60px #ff0;
-  }
-}
+    .upgrade-menu {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+    .upgrade-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 200px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #111;
+      border-radius: 5px;
+    }
 
-.stats {
-  margin-top: 20px;
-  font-size: 20px;
-}
+    .upgrade-name {
+      font-size: 16px;
+    }
 
-.upgrades {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .upgrade-price {
+      font-size: 16px;
+    }
 
-.upgrade {
-  padding: 10px;
-  background-color: #333;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    .referral-menu {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.upgrade.disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-</style>
+    .referral-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 200px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #111;
+      border-radius: 5px;
+    }
+
+    .referral-name {
+      font-size: 16px;
+    }
+
+    .referral-link {
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
+
   <div class="container">
-    <div class="coin" onclick="clickCoin()"></div>
-    <div class="stats">
-      <p>Coins: <span id="coins">0</span></p>
-      <p>Clicks: <span id="clicks">0</span></p>
-    </div>
-    <div class="upgrades">
-      <div class="upgrade" id="clickUpgrade" onclick="buyClickUpgrade()">
-        <p>Click Upgrade: +1 Click/Click</p>
-        <p>Price: <span id="clickUpgradePrice">1</span> coins</p>
+    <div class="coin"></div>
+    <div class="click-count">0</div>
+
+    <div class="upgrade-menu">
+      <h3>Покращення</h3>
+      <div class="upgrade-item">
+        <div class="upgrade-name">Клікер +1</div>
+        <div class="upgrade-price">10 монет</div>
       </div>
-      <div class="upgrade" id="autoClicker" onclick="buyAutoClicker()">
-        <p>Auto Clicker: +1 Click/s</p>
-        <p>Price: 2000 coins</p>
+      <div class="upgrade-item">
+        <div class="upgrade-name">Автоклікер</div>
+        <div class="upgrade-price">2000 монет</div>
+      </div>
+    </div>
+
+    <div class="referral-menu">
+      <h3>Реферали</h3>
+      <div class="referral-item">
+        <div class="referral-name">Твоє посилання</div>
+        <div class="referral-link">https://example.com/referral-link</div>
+      </div>
+      <div class="referral-item">
+        <div class="referral-name">Активні реферали</div>
+        <div class="referral-link">0</div>
       </div>
     </div>
   </div>
 
   <script>
-    let coins = 0;
-    let clicks = 0;
-    let clickPower = 1;
-    let autoClicker = false;
-    let clickUpgradePrice = 1;
+    // Змінні для зберігання даних
+    let clickCount = 0;
+    let clickUpgradePrice = 10;
+    let autoClickerPrice = 2000;
+    let clickUpgradeCount = 0;
+    let autoClickerCount = 0;
+    let autoClickInterval = null;
 
-    const coinsDisplay = document.getElementById('coins');
-    const clicksDisplay = document.getElementById('clicks');
-    const clickUpgrade = document.getElementById('clickUpgrade');
-    const clickUpgradePriceDisplay = document.getElementById('clickUpgradePrice');
-    const autoClickerUpgrade = document.getElementById('autoClicker');
+    // Змінна для збереження посилання на монетку
+    const coin = document.querySelector('.coin');
+    // Змінна для збереження посилання на елемент з кількістю кліків
+    const clickCountElement = document.querySelector('.click-count');
+    // Змінна для збереження посилання на елемент з ціною покращення +1 до кліків
+    const clickUpgradePriceElement = document.querySelector('.upgrade-item:first-child .upgrade-price');
+    // Змінна для збереження посилання на елемент з ціною автоклікера
+    const autoClickerPriceElement = document.querySelector('.upgrade-item:nth-child(2) .upgrade-price');
+    // Змінна для збереження посилання на елемент з кількістю активних рефералів
+    const referralCountElement = document.querySelector('.referral-item:nth-child(2) .referral-link');
 
-    function clickCoin() {
-      coins += clickPower;
-      clicks++;
-      coinsDisplay.textContent = coins;
-      clicksDisplay.textContent = clicks;
-      checkUpgrades();
+    // Функція для оновлення відображення кількісті кліків
+    function updateClickCount() {
+      clickCountElement.textContent = clickCount;
     }
 
-    function buyClickUpgrade() {
-      if (coins >= clickUpgradePrice) {
-        coins -= clickUpgradePrice;
-        clickPower++;
+    // Функція для оновлення відображення ціни покращення +1 до кліків
+    function updateClickUpgradePrice() {
+      clickUpgradePriceElement.textContent = clickUpgradePrice + ' монет';
+    }
+
+    // Функція для оновлення відображення ціни автоклікера
+    function updateAutoClickerPrice() {
+      autoClickerPriceElement.textContent = autoClickerPrice + ' монет';
+    }
+
+    // Функція для оновлення відображення кількості активних рефералів
+    function updateReferralCount(count) {
+      referralCountElement.textContent = count;
+    }
+
+    // Функція для обробки кліку на монетку
+    function handleClick() {
+      clickCount += 1 + clickUpgradeCount;
+      updateClickCount();
+    }
+
+    // Функція для обробки покупки покращення +1 до кліків
+    function handleUpgradeClick() {
+      if (clickCount >= clickUpgradePrice) {
+        clickCount -= clickUpgradePrice;
+        clickUpgradeCount += 1;
         clickUpgradePrice *= 5;
-        clickUpgradePriceDisplay.textContent = clickUpgradePrice;
-        coinsDisplay.textContent = coins;
-        checkUpgrades();
+        updateClickCount();
+        updateClickUpgradePrice();
       }
     }
 
-    function buyAutoClicker() {
-      if (coins >= 2000) {
-        coins -= 2000;
-        autoClicker = true;
-        coinsDisplay.textContent = coins;
-        autoClickerUpgrade.classList.add('disabled');
-        autoClick();
+    // Функція для обробки покупки автоклікера
+    function handleAutoClickerClick() {
+      if (clickCount >= autoClickerPrice) {
+        clickCount -= autoClickerPrice;
+        autoClickerCount += 1;
+        autoClickerPrice *= 5;
+        updateClickCount();
+        updateAutoClickerPrice();
+        startAutoClick();
       }
     }
 
-    function autoClick() {
-      if (autoClicker) {
-        coins += clickPower;
-        coinsDisplay.textContent = coins;
-        checkUpgrades();
-      }
-      setTimeout(autoClick, 1000);
+    // Функція для запуску автоклікера
+    function startAutoClick() {
+      autoClickInterval = setInterval(() => {
+        clickCount += autoClickerCount;
+        updateClickCount();
+      }, 1000);
     }
 
-    function checkUpgrades() {
-      if (coins >= clickUpgradePrice) {
-        clickUpgrade.classList.remove('disabled');
-      } else {
-        clickUpgrade.classList.add('disabled');
-      }
+    // Функція для зупинки автоклікера
+    function stopAutoClick() {
+      clearInterval(autoClickInterval);
     }
 
-    // Реферальна система (використовує Telegram API)
-    // Замініть 'YOUR_BOT_TOKEN' та 'YOUR_CHAT_ID' на відповідні значення
-    const botToken = '7375680425:AAGUkQ7NP83_TWwReLGRlxaF7vEfQJypq0I';
-    const chatId = '@Senzeon';
+    // Додавання обробника подій для кліку на монетку
+    coin.addEventListener('click', handleClick);
+    // Додавання обробника подій для кліку на кнопку покращення +1 до кліків
+    document.querySelector('.upgrade-item:first-child').addEventListener('click', handleUpgradeClick);
+    // Додавання обробника подій для кліку на кнопку автоклікера
+    document.querySelector('.upgrade-item:nth-child(2)').addEventListener('click', handleAutoClickerClick);
 
-    function sendReferral(userId) {
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: `Новий реферал: ${userId}`
-        })
-      });
+    // Реферальна система (замінники для Telegram функцій)
+    let referralLink = 'https://example.com/referral-link';
+    let referralCount = 0;
+
+    // Функція для створення реферального посилання
+    function generateReferralLink() {
+      // Тут буде реалізована функція для генерації унікального реферального посилання 
+      // з використанням Telegram API.
+      return referralLink;
     }
 
-    // Приклад використання:
-    // Якщо у вас є функція, яка отримує ID користувача з Telegram
-    // sendReferral(userId);
+    // Функція для обробки реферального посилання
+    function handleReferralClick(link) {
+      // Тут буде реалізована функція для обробки реферального посилання 
+      // з використанням Telegram API.
+      referralCount += 1;
+      updateReferralCount(referralCount);
+    }
 
-    // ...
+    // Оновлення відображення посилання та кількості рефералів
+    document.querySelector('.referral-item:first-child .referral-link').textContent = generateReferralLink();
+    updateReferralCount(referralCount);
+
+    // Підміна Telegram API функцій для використання в браузері
+    //  ... (реалізація обробки реферальних посилань через Telegram API)
   </script>
 </body>
 </html>
